@@ -1,0 +1,41 @@
+<div class="min-h-screen bg-slate-900 flex flex-col items-center p-6 text-white transition-colors duration-500">
+
+  <div class="w-full max-w-md flex items-center justify-between mb-8">
+    <button routerLink="/" class="p-2 hover:bg-slate-800 rounded-full transition-colors font-bold text-indigo-400">
+      ✕ Close
+    </button>
+    <h1 class="text-xl font-bold">Scan QR Code</h1>
+    <div class="w-8"></div>
+  </div>
+
+  <div class="relative w-full max-w-md aspect-square rounded-3xl overflow-hidden border-4 border-indigo-500 shadow-2xl">
+    <zxing-scanner
+      [formats]="allowedFormats"
+      (scanSuccess)="onCodeResult($event)"
+      (permissionResponse)="onHasPermission($event)"
+      class="w-full h-full object-cover">
+    </zxing-scanner>
+
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+      <div class="w-64 h-64 border-2 border-indigo-400/50 rounded-3xl shadow-[0_0_0_9999px_rgba(15,23,42,0.6)]">
+        <div class="absolute inset-0 border-2 border-indigo-500 animate-pulse rounded-3xl"></div>
+      </div>
+    </div>
+
+    @if (!hasPermission) {
+      <div class="absolute inset-0 bg-slate-900 flex flex-col items-center justify-center p-8 text-center">
+        <span class="text-4xl mb-4 text-indigo-500 italic font-bold">Camera off</span>
+        <p class="text-lg">Camera access required</p>
+      </div>
+    }
+  </div>
+
+  @if (qrResultString) {
+    <div class="mt-8 w-full max-w-md bg-white dark:bg-slate-800 p-6 rounded-2xl text-slate-900 dark:text-white shadow-2xl transition-all">
+      <p class="text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest mb-1">Found!</p>
+      <a [href]="qrResultString" target="_blank" class="block text-lg font-medium break-all underline decoration-indigo-300 dark:decoration-indigo-600">
+        {{ qrResultString }}
+      </a>
+    </div>
+  }
+</div>

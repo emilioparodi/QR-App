@@ -1,59 +1,26 @@
-# QrApp
+# QR-App (Angular 21 + Tailwind CSS)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.3.
+A modern, lightweight, and open-source web application for real-time **QR code generation** and **scanning**. Built with the latest Angular ecosystem features.
 
-## Development server
+![Angular Version](https://img.shields.io/badge/Angular-21.1.2-DD0031?style=for-the-badge&logo=angular)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4+-38B2AC?style=for-the-badge&logo=tailwind-css)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
-```
+## Features
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **Instant QR Generation:** Enter any URL or text and generate a high-resolution QR code instantly.
+- **High-Quality Download:** Save generated QR codes as PNG files directly to your device.
+- **Live Scanner:** Scan QR codes in real-time using your smartphone camera or webcam.
+- **Modern UI:** Clean, mobile-first, and responsive interface built with Tailwind CSS.
+- **Angular 21 Control Flow:** Optimized performance using the new `@if` / `@else` syntax.
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Tech Stack
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+* **Framework:** [Angular 21.1.2](https://angular.dev/)
+* **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+* **QR Generation:** [qrcode](https://www.npmjs.com/package/qrcode)
+* **QR Scanning:** [@zxing/ngx-scanner](https://www.npmjs.com/package/@zxing/ngx-scanner)
