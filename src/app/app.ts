@@ -9,7 +9,6 @@ import { RouterOutlet } from '@angular/router';
   styleUrls: ['./app.css']
 })
 export class App implements OnInit {
-  protected readonly title = signal('qr-app');
 
   isDark = false;
   deferredPrompt: any;
