@@ -1,14 +1,13 @@
 <div class="min-h-screen bg-slate-900 flex flex-col items-center p-6 text-white transition-colors duration-500">
 
   <div class="w-full max-w-md flex items-center justify-between mb-8">
-    <button routerLink="/" class="p-2 hover:bg-slate-800 rounded-full transition-colors font-bold text-indigo-400">
-      ✕ Close
+    <button routerLink="/" class="p-2 hover:bg-slate-800 rounded-full transition-colors font-bold text-indigo-400 flex items-center gap-1">
+      <span class="text-xl">✕</span> Close
     </button>
-    <h1 class="text-xl font-bold">Scan QR Code</h1>
-    <div class="w-8"></div>
-  </div>
+    <h1 class="text-xl font-bold tracking-tight">Scan QR Code</h1>
+    <div class="w-12"></div> </div>
 
-  <div class="relative w-full max-w-md aspect-square rounded-3xl overflow-hidden border-4 border-indigo-500 shadow-2xl">
+  <div class="relative w-full max-w-md aspect-square rounded-[2.5rem] overflow-hidden border-4 border-indigo-500/30 shadow-2xl bg-black">
     <zxing-scanner
       [formats]="allowedFormats"
       (scanSuccess)="onCodeResult($event)"
@@ -17,25 +16,66 @@
     </zxing-scanner>
 
     <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-      <div class="w-64 h-64 border-2 border-indigo-400/50 rounded-3xl shadow-[0_0_0_9999px_rgba(15,23,42,0.6)]">
+      <div class="w-64 h-64 border-2 border-white/20 rounded-3xl shadow-[0_0_0_9999px_rgba(15,23,42,0.7)] relative">
         <div class="absolute inset-0 border-2 border-indigo-500 animate-pulse rounded-3xl"></div>
+        <div class="absolute top-0 left-0 w-full h-[2px] bg-indigo-400 shadow-[0_0_15px_rgba(129,140,248,0.8)] animate-[scan_2s_linear_infinite]"></div>
       </div>
     </div>
 
     @if (!hasPermission) {
       <div class="absolute inset-0 bg-slate-900 flex flex-col items-center justify-center p-8 text-center">
-        <span class="text-4xl mb-4 text-indigo-500 italic font-bold">Camera off</span>
-        <p class="text-lg">Camera access required</p>
+        <span class="text-5xl mb-4">📷</span>
+        <p class="text-lg font-bold">Camera access required</p>
+        <p class="text-sm text-slate-400 mt-2">Please enable camera permissions in your browser settings.</p>
       </div>
     }
   </div>
 
   @if (qrResultString) {
-    <div class="mt-8 w-full max-w-md bg-white dark:bg-slate-800 p-6 rounded-2xl text-slate-900 dark:text-white shadow-2xl transition-all">
-      <p class="text-xs font-black text-indigo-600 dark:text-indigo-400 uppercase tracking-widest mb-1">Found!</p>
-      <a [href]="qrResultString" target="_blank" class="block text-lg font-medium break-all underline decoration-indigo-300 dark:decoration-indigo-600">
-        {{ qrResultString }}
-      </a>
+    <div class="mt-8 w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-[2rem] text-white shadow-2xl animate-in fade-in zoom-in duration-300">
+
+      <div class="flex justify-between items-start mb-4">
+        <div>
+          <p class="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em] mb-1">Result Detected</p>
+          <p class="text-xs text-slate-300">Content found:</p>
+        </div>
+        <button (click)="resetScan()" class="text-[10px] font-bold bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full transition-colors border border-white/10 uppercase tracking-tighter">
+          Scan Again
+        </button>
+      </div>
+
+      <div class="mb-6 bg-black/20 p-4 rounded-2xl border border-white/5">
+        <p class="text-base font-medium break-all leading-tight text-indigo-100">
+          {{ qrResultString }}
+        </p>
+      </div>
+
+      @if (isUrl(qrResultString)) {
+        <a [href]="qrResultString.startsWith('www.') ? 'https://' + qrResultString : qrResultString"
+           target="_blank"
+           class="flex items-center justify-center gap-3 w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded-2xl shadow-lg shadow-indigo-500/20 transition-all active:scale-[0.98]">
+          <span class="text-xl">🌐</span>
+          Open Link
+        </a>
+      } @else {
+        <div class="flex items-center justify-center gap-2 py-3 px-4 bg-slate-800/50 rounded-2xl border border-white/5">
+          <span class="text-lg">📄</span>
+          <span class="text-sm text-slate-300 italic font-medium">Plain Text Content</span>
+        </div>
+      }
     </div>
   }
+
+  <div class="mt-auto py-6">
+    <p class="text-slate-500 text-[10px] uppercase tracking-widest font-bold">EP Dev • QR Scanner Engine</p>
+  </div>
+
 </div>
+
+<style>
+  @keyframes scan {
+    0% { top: 0; }
+    50% { top: 100%; }
+    100% { top: 0; }
+  }
+</style>

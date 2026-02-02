@@ -14,11 +14,23 @@ export class QrReader {
   qrResultString: string = '';
   hasPermission: boolean = true;
 
+  isUrl(text: string): boolean {
+    try {
+      return text.startsWith('http://') || text.startsWith('https://') || text.startsWith('www.');
+    } catch {
+      return false;
+    }
+  }
+
   onCodeResult(result: string) {
     this.qrResultString = result;
   }
 
   onHasPermission(has: boolean) {
     this.hasPermission = has;
+  }
+
+  resetScan() {
+    this.qrResultString = '';
   }
 }

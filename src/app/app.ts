@@ -1,25 +1,55 @@
-import { Component, signal, Renderer2, OnInit } from '@angular/core';
+import { Component, signal, Renderer2, OnInit, HostListener, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
 export class App implements OnInit {
   protected readonly title = signal('qr-app');
 
   isDark = false;
+  deferredPrompt: any;
+  showInstallBtn = false;
+  isIOS = false;
 
-  constructor(private renderer: Renderer2) {}
+  constructor(private renderer: Renderer2, @Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit() {
-    // Controlla se l'utente aveva già scelto la dark mode
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      this.setDark(true);
+    if (isPlatformBrowser(this.platformId)) {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        this.setDark(true);
+      }
+      this.checkPlatform();
     }
+  }
+
+  private checkPlatform() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    }
+  }
+
+  @HostListener('window:beforeinstallprompt', ['$event'])
+  onBeforeInstallPrompt(e: any) {
+    e.preventDefault();
+    this.deferredPrompt = e;
+    this.showInstallBtn = true;
+  }
+
+  installPWA() {
+    if (!this.deferredPrompt) return;
+    this.deferredPrompt.prompt();
+    this.deferredPrompt.userChoice.then((choice: any) => {
+      if (choice.outcome === 'accepted') {
+        this.showInstallBtn = false;
+      }
+      this.deferredPrompt = null;
+    });
   }
 
   toggleTheme() {
@@ -30,10 +60,14 @@ export class App implements OnInit {
     this.isDark = dark;
     if (dark) {
       this.renderer.addClass(document.documentElement, 'dark');
-      localStorage.setItem('theme', 'dark');
+      if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem('theme', 'dark');
+      }
     } else {
       this.renderer.removeClass(document.documentElement, 'dark');
-      localStorage.setItem('theme', 'light');
+      if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem('theme', 'light');
+      }
     }
   }
 }
