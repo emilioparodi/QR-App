@@ -1,6 +1,6 @@
 {
-  "name": "qr-app",
-  "short_name": "qr-app",
+  "name": "QR App",
+  "short_name": "QR App",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
